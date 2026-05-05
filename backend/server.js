@@ -3,6 +3,10 @@ const cors = require('cors');
 const path = require('path');
 require('dotenv').config();
 const connectDB = require('./db');
+const fs = require('fs');
+
+const rootPath = path.resolve(__dirname, '..');
+const frontendPath = path.resolve(rootPath, 'frontend', 'dist');
 
 const app = express();
 
@@ -19,39 +23,44 @@ app.use('/api/dashboard', require('./routes/dashboardRoutes'));
 app.use('/api/assessments', require('./routes/assessmentRoutes'));
 
 // Serve Static Files in Production
-const frontendPath = path.resolve(process.cwd(), 'frontend', 'dist');
-console.log('Current Working Directory:', process.cwd());
+console.log('Project Root Path:', rootPath);
 console.log('Target Frontend Static Path:', frontendPath);
 
 // Check if path exists
-const fs = require('fs');
 if (fs.existsSync(frontendPath)) {
   console.log('Frontend dist folder found. Contents:', fs.readdirSync(frontendPath));
 } else {
   console.error('WARNING: Frontend dist folder NOT found at:', frontendPath);
 }
 
+// Serve Landing Page at Root
+app.get('/', (req, res) => {
+  res.sendFile(path.join(rootPath, 'index.html'));
+});
+
+// Serve Static Files for Landing Page (styles.css, images, etc.)
+app.use(express.static(rootPath));
+
+// Serve React App Static Files
 app.use(express.static(frontendPath));
 
-// API Routes
-app.use('/api/auth', require('./routes/authRoutes'));
-app.use('/api/projects', require('./routes/projectRoutes'));
-app.use('/api/tasks', require('./routes/taskRoutes'));
-app.use('/api/users', require('./routes/userRoutes'));
-app.use('/api/dashboard', require('./routes/dashboardRoutes'));
-app.use('/api/assessments', require('./routes/assessmentRoutes'));
-
 // For any other route, serve the index.html from frontend/dist
-// For any other route, serve the index.html from frontend/dist
-app.use((req, res) => {
+app.use((req, res, next) => {
+  // If it's an API route, let it pass through (though it should have been caught by the routes above)
+  if (req.url.startsWith('/api')) {
+    return next();
+  }
+  
   const indexPath = path.join(frontendPath, 'index.html');
   res.sendFile(indexPath, (err) => {
     if (err) {
-      console.error('Error sending index.html:', err);
-      res.status(500).send('Frontend build not found. Please ensure the build script ran successfully.');
+      console.error('Error sending frontend index.html:', err);
+      // Fallback to landing page if frontend build is missing
+      res.sendFile(path.join(rootPath, 'index.html'));
     }
   });
 });
+
 
 const PORT = process.env.PORT || 5000;
 

@@ -58,8 +58,9 @@ const App = () => {
           </ProtectedRoute>
         }
       />
-      <Route path="/" element={<CandidateDetails />} />
-      <Route path="*" element={<Navigate to="/" />} />
+      <Route path="/start" element={<CandidateDetails />} />
+      <Route path="/" element={<Navigate to="/start" />} />
+      <Route path="*" element={<Navigate to="/start" />} />
     </Routes>
   );
 };

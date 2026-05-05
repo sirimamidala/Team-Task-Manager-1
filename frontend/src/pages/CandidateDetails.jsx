@@ -20,8 +20,14 @@ const CandidateDetails = () => {
       <div className="absolute -bottom-8 left-20 w-96 h-96 bg-accent-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
 
       <div className="max-w-md w-full relative z-10">
+        <div className="mb-8">
+          <a href="/" className="inline-flex items-center text-slate-400 hover:text-white transition-colors text-sm font-bold group">
+            <span className="mr-2 group-hover:-translate-x-1 transition-transform">←</span> Back to Landing Page
+          </a>
+        </div>
+
         <div className="text-center mb-10">
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-gradient-to-tr from-primary-600 to-primary-400 shadow-2xl mb-6">
+          <div className="inline-flex items-center justify-center w-20 h-20 rounded-[2rem] bg-gradient-to-tr from-primary-600 to-primary-400 shadow-2xl shadow-primary-500/20 mb-6">
             <GraduationCap className="text-white" size={40} />
           </div>
           <h1 className="text-4xl font-black text-white tracking-tight leading-tight">
@@ -31,6 +37,7 @@ const CandidateDetails = () => {
             Complete your profile to start the technical assessment.
           </p>
         </div>
+
 
         <div className="glass-card rounded-[2.5rem] p-10 shadow-2xl border border-white/10">
           <form className="space-y-6" onSubmit={handleSubmit}>
