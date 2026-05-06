@@ -12,7 +12,8 @@
     "server": "cd backend && node server.js",
     "client": "cd frontend && npm run dev",
     "build": "npm run build --prefix frontend",
-    "postinstall": "npm install --prefix frontend --include=dev && npm run build"
+    "postinstall": "npm install --prefix frontend --include=dev && npm run build",
+    "deploy": "git add . && git commit -m \"Automatic deployment update\" && git push origin main"
   },
   "dependencies": {
     "concurrently": "^8.2.2",
